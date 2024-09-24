@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+
+<head> 
+
+<style>
+
+body {
+    margin: 0;
+}
+
+
+.notification-banner {
+    align-self: start;
+    background-color: rgb(143, 42, 231);
+    color: azure;
+    width: auto;
+    text-align: center;
+    font-size: 20px;
+    grid-area: 1 / 1 / 2 / 13 ;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-style: italic;
+    padding: 5px;
+}
+
+.main-container {  /* this is for the webpage itself */
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    width: 100vw;
+    height: 100vh;
+}
+
+#form-root {    /* this holds the main body and the menu*/
+    grid-area: 1 / 1 / -1 / -1 ;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 3;
+    height: 100vh;
+    width: 100wh;
+    border: 5px solid rgba(49, 125, 248, 0.774);
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: 1fr;
+}
+
+/* #region FormBody */
+
+#form-content-container {
+    grid-area: 1 / 1 / -1 / -1;
+    display: grid;
+    margin: auto;
+    box-sizing: border-box;
+    border: 1px solid red;
+    width: 25em;       /* 400 divided by 16 is 25 */
+    height: 37.5em;
+    grid-template-columns: 1fr 14fr 1fr;
+    grid-template-rows: 1fr 4fr 16fr 1fr;           /* these are contorlling the size of the box*/
+}
+
+#form-body {
+    grid-area: 1 / 1 / -1 / -1;
+    box-sizing: border-box;
+    background-color: rgb(239, 239, 239);
+}
+
+#submit-body {
+    grid-row: -2 / -1;
+    grid-column: -2 / -1;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: xx-large;
+    font-weight: bold;
+    text-align: center;
+    border: 3px solid black;
+    background-color: white;
+
+}
+
+#back-container {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: xx-large;
+    font-weight: bold;
+    text-align: center;
+    grid-row: 4 / 5;
+    grid-column: 1 / 2;
+    border: 3px solid black;
+    background-color: white;
+
+}
+
+#close-body {
+    grid-row: 1 / 2;
+    grid-column: -2 / -1;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: xx-large;
+    font-weight: bold;
+    text-align: center;
+    border: 3px solid black;
+    background-color: white;
+
+}
+
+#question-body {
+    grid-row: 2 / 3;
+    grid-column: 2 / 3;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: xx-large;
+    font-weight: bold;
+    text-align: center;
+    border: 3px solid rgb(255, 255, 255);
+    border-radius: 4em;
+    background-color: none;
+
+}
+
+#option-container {
+    grid-row: 3 / 4;
+    grid-column: 2 / 3;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: xx-large;
+    font-weight: bold;
+    text-align: center;
+    border: 3px dashed rgb(108, 108, 108);
+    background-color: rgba(255, 255, 255, 0.232);
+    margin: 0.65em;
+    flex-direction: column;
+    justify-content: space-evenly;
+    display: flex;
+}
+
+.option {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: xx-large;
+    font-weight: bold;
+    text-align: center;
+    max-height: 25%; /* this will work for now, but it needs to adapt to multiple option numbers*/
+    border: 3px solid rgb(0, 0, 0);
+    background-color: rgb(255, 255, 255);
+    margin: 10px;
+    transform: translateX(0);
+    transition: transform 1s;
+}
+
+.option:hover {
+    background-color: yellow;
+    transform: translateX(10px);
+}
+
+/* #endregion */
+
+/* #region Editor */
+
+#editor-container {
+    grid-area: 1 / 1 / -1 / 2;
+    background-color: rgba(208, 233, 255, 0.355);
+    min-width: 200px;
+    display: grid;
+    grid-template-columns: 1fr 8fr;
+    grid-template-rows: 1fr 13fr;
+    gap: 0px;
+    justify-content: start;
+}
+
+    #editor-header-container {
+            grid-area: 1 / 1 / 2 / -1;
+
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: 30px;
+            font-style: italic;
+            color: rgb(32, 58, 193);
+        }
+
+            #editor-header {
+                box-sizing: border-box;
+                background-color: rgb(255, 255, 255); 
+                border: 3px solid black;
+            }
+
+    #editor-page-selector-container {
+        grid-area: 2 / 1 / -1 / 2;
+        background-color: rgb(39, 39, 39); 
+        display: flex;
+        flex-direction: column;
+    }
+
+        #page-tabs-container {
+            background-color: rgb(103, 232, 60); 
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: end;
+        }
+
+        .editor-page-tabs {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            text-align: center;
+
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: rgb(124, 125, 225);
+            background-color: rgb(255, 255, 255); 
+            width: 30px;
+            height: 30px;
+            margin-top: 0px;
+            border-radius: 10px;
+            border: 2px solid rgb(124, 125, 225);
+        }
+
+        .active-editor-page-tab {
+            background-color: rgb(39, 39, 39);
+            color: white;
+            height: 40px;
+            width: 40px;
+            border-top-left-radius: 30%;
+            border-bottom-left-radius: 30%;
+            border-top-right-radius: 0px;
+            border-bottom-right-radius: 0px;
+        }
+
+        #page-tab-adder {
+            margin-left: 20px;
+        }
+
+    #editor-page-container {
+        grid-area: 2 / 2 / -1 / -1;
+        background-color: rgb(39, 39, 39); 
+        border-top-right-radius: 15px ;
+        border-bottom-right-radius: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+        #editor-page-header {
+            background-color: rgb(252, 110, 110);
+            border-top-right-radius: inherit;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        #editor-question-input-container {
+            background-color: rgb(248, 255, 37);
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+            gap: 15px;
+        }
+
+            .question-input-containers {
+                flex-shrink: 4;
+                background-color: rgb(227, 207, 54);
+                font-family: Verdana, Geneva, Tahoma, sans-serif;
+                color: rgb(255, 255, 255);
+                font-weight: bolder;
+                border-bottom: 2px solid rgb(243, 255, 107);
+                margin: 0px;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+            }
+
+            .question-inputs {
+                box-sizing: border-box;
+                border: 2px solid rgb(255, 254, 169);
+                border-radius: 20px;
+                height: 40px;
+                min-width: 70px;
+                margin: 5px;
+            }
+
+        #editor-option-input-container {
+            background-color: rgb(149, 54, 227);
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+            gap: 15px;
+        }
+
+            .option-input-containers {
+                flex-shrink: 4;
+                background-color: rgb(106, 44, 214);
+                font-family: Verdana, Geneva, Tahoma, sans-serif;
+                color: rgb(255, 255, 255);
+                font-weight: bolder;
+                border-bottom: 2px solid rgb(154, 107, 255);
+                margin: 0px;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+            }
+
+            .option-inputs {
+                box-sizing: border-box;
+                border: 2px solid rgb(228, 169, 255);
+                border-radius: 20px;
+                height: 40px;
+                min-width: 70px;
+                margin: 5px;
+                outline: 15px solid rgb(106, 44, 214);
+                outline-offset: 0px;
+            }
+        
+        #editor-extras-container {
+            background-color: mediumturquoise;
+            height: 50px;
+            color: white;
+            display: flex; /* should this be a grid... probs*/
+            flex-direction: column;
+        }
+
+            #editor-extras-placeholder {
+                background-color: rgb(31, 130, 127);
+                height: 200px;
+            }
+
+/* #endregion */
+
+</style>
+
+</head>
+
+<body>
+
+<div class="main-container">
+
+    <div class="notification-banner">
+        <span id="notifyText">Some text</span>
+    </div>
+
+    <div id="form-root">
+        <div id="form-content-container">
+            <div id="form-body"></div>
+            <div id="question-body">"Do You Like The Grid?"</div>
+            <div id="option-container">
+                <div id="option-1" class="option">Love it!</div>
+                <div id="option-2" class="option">It's alright.</div>
+                <div id="option-3" class="option">I don't...</div>
+                <div id="option-4" class="option">I absolutely hate it!</div>
+            </div>
+            <div id="submit-body">></div>
+            <div id="back-container">o</div>
+            <div id="close-body">X</div>
+            <div id="progress-container"></div>
+        </div>
+        
+        <div id="editor-container">
+            <div id="editor-header-container">
+                <div id="editor-header">Editor...</div>
+            </div>
+            <div id="editor-page-selector-container">
+                <div id="page-tabs-container">         <!-- this should be a... flexbox/grid? -->
+                    <div id="page-tab0" class="editor-page-tabs">1</div>
+                </div>
+                <div id="page-tab-adder" class="editor-page-tabs">+</div>    <!-- this is still a button class! -->
+            </div>
+
+            <div id="editor-page-container">
+                <div id="editor-page-header"> Current Page
+                    <button id="editor-save-button">SAVE</button>
+                </div>
+                <div id="editor-question-input-container"> Pick A Question
+                    <div id="question-input-container" class="question-input-containers">
+                        Question
+                        <input type="text" id="question-input" class="question-inputs"></input>
+                    </div>
+                </div>
+                <div id="editor-option-input-container"> Choose Your Options
+                    <div id="option-input-container1" class="option-input-containers">
+                        OPTION 1
+                        <input type="text" placeholder="First question..." id="option-input1" class="option-inputs"></input>
+                    </div>
+                    <div id="option-input-container2" class="option-input-containers">
+                        OPTION 2
+                        <input type="text" placeholder="Second question..." id="option-input2" class="option-inputs"></input>
+                    </div>
+                    <div id="option-input-container3" class="option-input-containers">
+                        OPTION 3
+                        <input type="text" placeholder="Third question..." id="option-input3" class="option-inputs"></input>
+                    </div>
+                    <div id="option-input-container4" class="option-input-containers">
+                        OPTION 4
+                        <input type="text" placeholder="Last question..." id="option-input4" class="option-inputs"></input>
+                    </div>
+                </div>
+                <div id="editor-extras-container"> Extras
+                    <div id="editor-extras-placeholder">
+                        <button>lol</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+document.getElementById("notifyText").textContent = "i notify you of things, but not rn...";
+
+//const value
+
+
+//          document.getElementById("littleButton").addEventListener("mouseover", hoverChange)
+//document.getElementById("littleButton").style.border.
+
+
+const pageData = {
+    pageNumber: 0,
+    question: "",
+    options: ["test zebra", "test tiger", "test lion", "test hippo"],
+    maxSelectable: 1,
+    autoSubmit: true
+}
+
+const optionData = [
+    "Option 1",
+    "Option 2",
+    "Option 3",
+    "Option 4"
+]
+
+const formData = {
+    id: "mainBody",
+    active: true, 
+    activePageOb: {},
+    activePage: 3,
+    isSubmitted: false,
+    includeIntro: false,
+    includeOutro: false,
+    isAdmin: false,
+    pages: [page1 = {
+            pageNumber: 0,
+            question: "pikachu",
+            options: ["interfere1", "interfere2", "interfere3", "interfere4"],
+            maxSelectable: 1,
+            autoSubmit: true
+            },
+            {},
+            {},
+            {},
+        ],
+    numOfPages: 0,
+
+}
+
+formData.numOfPage = formData.pages.length + 1;
+
+
+const { pages : [...pages] } = formData;
+
+console.log(pages)
+
+
+
+
+const newForm = {...formData};     //apparently this is how to copy objects/arrays. Assigning just refers to OG.
+const tempForm = {...newForm};
+
+const editorStates = {
+    loaded: newForm,
+    tempVersion: tempForm, //this is the one that gets updated every time.
+    activePage: 0,
+    
+    activePageOb: {},
+    question: "iunno",
+    options: ["u", "c", "l", "p"],
+    autoSubmit: true,
+    maxSelectable: 1,
+
+    store: function() {     //do we actually want to clone all these, rather than re-assign? cause less issues myb.
+        this.tempVersion.activePage = this.activePage;  //this needs to be handled differently.
+        this.activePageOb.question = this.question;
+        this.activePageOb.options = this.options;
+        this.activePageOb.autoSubmit = this.autoSubmit;
+        this.activePageOb.maxSelectable = this.maxSelectable;
+        this.tempVersion.pages[this.activePage] = this.activePageOb;
+    },
+    load: function() {
+        this.activePage = this.tempVersion.activePage;
+        this.activePageOb = this.tempVersion.pages[this.activePage];
+        this.question = this.activePageOb.question;
+        this.options = this.activePageOb.options;
+        this.autoSubmit = this.activePageOb.autoSubmit;
+        this.maxSelectable = this.activePageOb.maxSelectable;
+    },
+    update: function(index, updatedEntry) {                         //update should fire each time a change is made
+        this.tempVersion.pages[this.activePage].options[index] = updatedEntry
+        console.log("the new option is" + updatedEntry)
+    },
+    refresh: function(...options) {
+        const qInput = document.getElementById("question-input");           //you need to put "question-input" string as 1st arg when calling 
+        qInput.value = this.question;
+
+        const oInputs = document.querySelectorAll(".option-inputs");    //you need to use ...spread when calling 2nd arg
+        for (let i = 0 ; i < options.length ; i++) {
+            console.log(options.length)
+            oInputs[i].value = options[i];
+        };
+        //this also needs autoSubmit + maxSelectable
+    },
+
+
+    save: function() {                                              //save should replace 'loaded'? .....but why?
+        console.log("this saves stuff, lol")
+    }
+}
+
+
+       //refresh = visual menu content    load = occupy editorState working memory     update = inputs into editorStates
+       //store = oldActive into TempVersion
+
+
+
+
+
+
+const newPageTrigger = document.getElementById("page-tab-adder")    //this adds a new page to DATA, but also handles render. maybe separate?
+newPageTrigger.addEventListener("click", function() {
+    newPageConstructor()
+})
+
+activeTab();
+
+
+function formConstructor() {         // this creates the DATA structure, not the DOM/html content. You read from this.
+    const newForm = formData;
+    newForm.numOfPages = 4 // < this number will be a variable eventually, which you'll plug in. it'll control how  many pages are gen'd.
+    for (let i = 0 ; i < 4 ; i++)
+        newForm.pages.push(pageData) // I think this should add a new page[i] object to the pages array. hopefully
+        newForm.pages[i].pageNumber = i + 1;
+        // newForm.pages[i].options.map(pageConstructor) //this won't work yet, because 'options' is empty; there's nothing to map onto.
+        newForm.pages[i].question = "This is a placeholder; answer anything!"
+        newForm.pages[i].options = ["Option 1", "Option 2", "Option 3"] //this should be an input at some point
+        console.log("formConstructor ran btw")
+}
+//const activeEditingPage = newForm.pages[newForm.activePage - 1]  //this should grab the active page's object?
+
+
+function newPageConstructor() {      // this should edit the currently editing form/page/etc
+    const newPage = pageData;
+    newPage.pageNumber = newForm.pages.length + 1 //this should figure out the number of the page in relation to the others
+    newForm.pages.push(newPage);
+    //pageButtonUpdater();    Simplifying
+    refreshTabs();
+    console.log(newForm.pages.length)
+}
+
+
+
+function refreshTabs() {
+    const container = document.getElementById("page-tabs-container");
+    childDeleter(container);
+    const pages = newForm.pages;
+    for (let i = 0 ; i < pages.length ; i++) {
+        const tab = document.createElement("div");
+        tab.id = `page-tab${i}`;
+        tab.classList.add("editor-page-tabs");
+        tab.textContent = i + 1;
+        container.appendChild(tab);
+    }
+}
+
+function activeTab() {
+    const container = document.getElementById("page-tabs-container");
+    container.addEventListener("click", (event) => {
+        if (event.target !== event.currentTarget) {
+            const string = "active-editor-page-tab"
+            const oldActive = document.querySelector(`.${string}`);
+            editorStates.store(); //this should store the 'retiring' active page contents into it's object, then into TempVersion
+            oldActive ? oldActive.classList.remove(string) : false;
+            event.target.classList.add(string);
+            editorStates.activePage = parseInt(event.target.textContent) - 1;
+        }
+    })
+}
+
+console.log("carrot" + newForm.activePage)
+
+/*
+//relates to the tabs, in that the page contents need to update on click
+function optionUpdater(object) {                    //object is the active page
+    const updatedOptions = object.options
+    for (let i = 0; i < updatedOptions.length ; i++) {   //this transfers stored options into the inputs.
+        const newOption = updatedOptions[i]
+        const element = document.getElementById(`option-input${i + 1}`)
+        element.value = newOption;
+    }
+} */         //this should just be for refreshing everything, not just the options.
+
+
+function optionEditor() {          // instead of every keypress, changed to blur. Updates/saves when input loses focus
+    const inputs = document.getElementsByClassName("option-inputs")
+    for (let i = 0 ; i < inputs.length ; i++) {
+        inputs[i].addEventListener("blur", function() {
+            let updatedText = "it didn't update properly, lol"
+            if (this.value === "") {         // this doesn't account for spaces.
+                updatedText = `Option: ${i + 1}`
+            } else {
+                updatedText = this.value;    // if you declare the input before the reg. function, you can use it with an arrow func.
+            }
+            editorStates.update(i, updatedText)
+
+            const targetOption = document.getElementById(`option-${i + 1}`);
+            targetOption.textContent = updatedText;
+            console.log("it did something?");
+            console.log(this.value)
+        })
+    }
+}
+
+optionEditor();
+
+function childDeleter(element) {
+    let child = element.lastElementChild
+    while (child) {
+        element.removeChild(child)
+        child = element.lastElementChild
+    }
+}
+
+
+// i think this should add click function to any objec,t plus any necessary paramters.
+function clickHandler(a, b, c, d, e, f, g) {          //i'm imagining, you pass in properties and it does stuff depending.
+    const targetElement = this;
+    targetElement.addEventListener("click", function() {})
+}
+
+</script>
+
+</body>
